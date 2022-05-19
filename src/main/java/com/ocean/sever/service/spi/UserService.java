@@ -8,6 +8,7 @@ package com.ocean.sever.service.spi;
 
 import com.ocean.sever.entity.User;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -15,4 +16,8 @@ import java.util.Optional;
  */
 public interface UserService {
     Optional<User> findUserByUserEmail(String email);
+    Optional<User> findUserByUserId(long userId);
+    long registerUser(User user);
+    List<User> find(List<Long> user_ids);
+    List<User> findByName(String userName);
 }
