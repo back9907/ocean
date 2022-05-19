@@ -6,6 +6,7 @@
  */
 package com.ocean.sever.web.logic.spi;
 
+import com.ocean.sever.config.CommonResult;
 import com.ocean.sever.entity.User;
 
 import java.util.Optional;
@@ -15,4 +16,5 @@ import java.util.Optional;
  */
 public interface UserLogic {
     Optional<User> findUserByUserVOEmail(String email);
+    CommonResult logIn(String email, String password);
 }

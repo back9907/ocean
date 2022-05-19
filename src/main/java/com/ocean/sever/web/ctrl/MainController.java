@@ -40,4 +40,9 @@ public class MainController {
                 : CommonResult.userNotExist();
     }
 
+    @ApiOperation("验证账号密码")
+    @GetMapping(value = "/login")
+    public CommonResult logIn(@RequestParam("email")String email, @RequestParam("password")String password){
+        return userLogic.logIn(email,password);
+    }
 }

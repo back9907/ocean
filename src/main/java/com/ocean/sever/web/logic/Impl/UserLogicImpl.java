@@ -6,6 +6,7 @@
  */
 package com.ocean.sever.web.logic.Impl;
 
+import com.ocean.sever.config.CommonResult;
 import com.ocean.sever.entity.User;
 import com.ocean.sever.service.spi.UserService;
 import com.ocean.sever.web.logic.spi.UserLogic;
@@ -26,5 +27,15 @@ public class UserLogicImpl implements UserLogic {
     @Override
     public Optional<User> findUserByUserVOEmail(String email) {
         return userService.findUserByUserEmail(email);
+    }
+
+    @Override
+    public CommonResult logIn(String email, String password) {
+        Optional<User> user = userService.findUserByUserEmail(email);
+        if(user.isPresent()){
+            return password.equals(user.get().getPassword())?CommonResult.successWithData(findUserByUserVOEmail(email))
+                    :CommonResult.result(401,"Account password does not match",null);
+        }
+        return CommonResult.userNotExist();
     }
 }
