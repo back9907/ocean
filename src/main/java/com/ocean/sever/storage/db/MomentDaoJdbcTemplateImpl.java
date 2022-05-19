@@ -57,7 +57,7 @@ public class MomentDaoJdbcTemplateImpl implements MomentDao {
         try {
             String sql = "select distinct * from moment_info where private_level = 1 \n" +
                     "or (author_id = :user_id and private_level = 3) \n" +
-                    "or (author_id in (select distinct friend_id from user_relation where user_id = :user_id) and private_level = 2) or author_id = :user_id; ";
+                    "or (author_id in (select distinct friend_id from user_relation where user_id = :user_id) and private_level = 2) or author_id = :user_id order by create_time desc ";
             MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
             mapSqlParameterSource.addValue("user_id",userId);
             moments = namedParameterJdbcTemplate.query(sql,mapSqlParameterSource, ROWMAPPER);
