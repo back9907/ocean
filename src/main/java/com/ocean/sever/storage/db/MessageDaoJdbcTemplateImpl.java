@@ -63,9 +63,13 @@ public class MessageDaoJdbcTemplateImpl implements MessageDao {
 
     @Override
     public List<ChatMessage> receiveAllFriendNewMessage(long userId, long lastTime) {
-        String sql = "select * from (select *, ROW_NUMBER() " +
-                "over(partition by sender_id order by create_time desc) as time_order from message_info) as t " +
-                "where time_order = 1 AND receiver_id = :receiver_id AND create_time> :create_time";
+//        String sql = "select * from (select *, ROW_NUMBER() " +
+//                "over(partition by sender_id order by create_time desc) as time_order from message_info) as t " +
+//                "where time_order = 1 AND receiver_id = :receiver_id AND create_time> :create_time";
+        String sql = "select distinct b.message_id, b.sender_id, b.receiver_id, b.content, a.create_time "
+        +"from (select sender_id, receiver_id, max(create_time) as create_time from message_info where receiver_id = :receiver_id group by sender_id, receiver_id) a join"
+        +"(select message_id,sender_id, receiver_id, content, create_time from message_info where receiver_id = :receiver_id) " +
+                "b on a.sender_id = b.sender_id and a.create_time = b.create_time";
         MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
         mapSqlParameterSource.addValue("receiver_id", userId);
         mapSqlParameterSource.addValue("create_time", lastTime);
