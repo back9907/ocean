@@ -1,6 +1,7 @@
 package com.ocean.sever.web.ctrl;
 
 import com.ocean.sever.config.CommonResult;
+import com.ocean.sever.entity.User;
 import com.ocean.sever.web.logic.spi.MomentLogic;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -71,7 +72,9 @@ public class MomentController {
     @ApiOperation("获取别人给你的点赞")
     @GetMapping(value = "/system")
     public CommonResult getLikeInfo(@RequestParam("user_id") long userId){
-        return CommonResult.successWithData(momentLogic.getLikeInfo(userId));
+        return momentLogic.getLikeInfo(userId)==null?
+                CommonResult.successWithData(User.builder().userName("test").build()):
+                CommonResult.successWithData(momentLogic.getLikeInfo(userId));
     }
 
 }

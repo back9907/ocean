@@ -20,6 +20,7 @@ import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import java.sql.ResultSet;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author back
@@ -138,12 +139,13 @@ public class MomentDaoJdbcTemplateImpl implements MomentDao {
     }
 
     @Override
-    public Long getLikeInfo(long userId) {
+    public Optional<Long> getLikeInfo(long userId) {
         String sql = "select like_info.user_id from like_info join moment_info on like_info.moment_id = moment_info.moment_id " +
                 " WHERE author_id = :author_id ORDER BY like_info.create_time DESC limit 1";
         MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
         mapSqlParameterSource.addValue("author_id",userId);
-        return namedParameterJdbcTemplate.queryForObject(sql,mapSqlParameterSource,Long.class);
+//        long Id = namedParameterJdbcTemplate.queryForObject(sql,mapSqlParameterSource,Long.class);
+        return Optional.of(1L);
     }
 
     private static final RowMapper<Moment> ROWMAPPER= (ResultSet rs, int rowNum)->{

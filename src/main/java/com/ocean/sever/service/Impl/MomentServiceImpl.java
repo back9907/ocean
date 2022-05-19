@@ -63,7 +63,9 @@ public class MomentServiceImpl implements MomentService {
 
     @Override
     public Optional<User> getLikeInfo(long userId) {
-        return userService.findUserByUserId(momentDaoJdbcTemplate.getLikeInfo(userId));
+        return momentDaoJdbcTemplate.getLikeInfo(userId).isPresent()?
+                userService.findUserByUserId(momentDaoJdbcTemplate.getLikeInfo(userId).get()):
+                userService.findUserByUserId(1);
     }
 
 }

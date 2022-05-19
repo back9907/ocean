@@ -9,6 +9,8 @@ package com.ocean.sever.storage.spi;
 import com.ocean.sever.entity.Moment;
 
 import java.util.List;
+import java.util.Optional;
+
 /**
  * @author back
  */
@@ -19,5 +21,5 @@ public interface MomentDao {
     boolean cancelLikeForAMoment(long userId, long momentId);
     List<Long> ifUserLikeThisMoment(long userId);
     long postANewMoment(long userId, String content, String image, int private_level, String author_name);
-    Long getLikeInfo(long userId);
+    Optional<Long> getLikeInfo(long userId);
 }
