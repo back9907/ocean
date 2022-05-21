@@ -68,7 +68,7 @@ public class Client {
 
         this.userId = userId;
         try{
-            socket = new Socket("114.116.246.240",4242);
+            socket = new Socket("localhost",4242);
         }catch (Exception e){
             System.out.println("Error connection to server: " + e);
         }

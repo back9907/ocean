@@ -29,7 +29,8 @@ public class ChatLogicImpl implements ChatLogic {
 
     @Override
     public void sendMessage(long userId, String content,long destination) {
-        client.sendMessage(content);
+        String message = userId + "#" + destination + "#" + content;
+        client.sendMessage(message);
     }
 
     @Override
