@@ -69,7 +69,7 @@ public class Sever {
         }
     }
 
-    private synchronized void sendMessage(String message, int destination){
+    private synchronized void sendMessage(String message, int destination) throws IOException {
         String time = sdf.format(new Date());
         String messageLf = time + "#" + message;
         System.out.println(messageLf);
@@ -81,6 +81,8 @@ public class Sever {
 //            al.remove(destination);
             System.out.println("Disconnected Client " + ct.userId + " removed from list.");
         }
+
+        ct.outputStream.flush();
     }
 
     class ClientThread extends Thread {
@@ -99,8 +101,6 @@ public class Sever {
             try {
                 outputStream = new ObjectOutputStream(socket.getOutputStream());
                 inputStream = new ObjectInputStream(socket.getInputStream());
-
-
                 userId = Long.parseLong(inputStream.readObject().toString());
                 System.out.println(userId + " just connect.");
             } catch (IOException | ClassNotFoundException e) {
