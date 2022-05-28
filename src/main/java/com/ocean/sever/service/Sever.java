@@ -8,6 +8,8 @@ package com.ocean.sever.service;
 
 import com.ocean.sever.config.BSTree;
 import com.ocean.sever.config.Node;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -30,6 +32,8 @@ public class Sever {
 
     private boolean keepGoing;
 
+    protected final Logger LOG = LoggerFactory.getLogger(getClass());
+
     public Sever(int port) {
         this.port = port;
         sdf = new SimpleDateFormat("HH:mm:ss");
@@ -51,7 +55,10 @@ public class Sever {
 
                 ClientThread t = new ClientThread(socket);
                 Node<ClientThread> clientNode= new Node<>(t.userId,t);
-                tree.insert(clientNode);
+                if (!tree.insert(clientNode)){
+                    LOG.warn("客户端已存在");
+                    return;
+                }
                 t.start();
             }
 

@@ -34,6 +34,11 @@ public class BSTree {
         }
         //TODO 不允许插入重复项
 
+        if (node.userId==root.userId){
+            System.out.println("插入重复");
+            return false;
+        }
+
         Node current = root;
         while (current != null) {
             if (node.userId>current.userId) {
