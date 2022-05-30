@@ -113,7 +113,7 @@ public class Sever {
             try {
                 outputStream = new ObjectOutputStream(socket.getOutputStream());
                 inputStream = new ObjectInputStream(socket.getInputStream());
-                userId = Long.parseLong(inputStream.readObject().toString());
+                userId = Long.parseLong(inputStream.readObject().toString().split("#")[1]);
                 System.out.println(userId + " just connect.");
             } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
