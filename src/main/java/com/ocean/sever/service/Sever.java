@@ -134,6 +134,7 @@ public class Sever {
                     System.out.println(userId + "Exception reading Stream: " + e);
                     break;
                 } catch (ClassNotFoundException e) {
+                    LOG.error(e.getMessage()+"137");
                     close();
                     start();
                     break;

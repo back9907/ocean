@@ -80,13 +80,13 @@ public class Client {
             outputStream = new ObjectOutputStream(socket.getOutputStream());
             inputStream = new ObjectInputStream(socket.getInputStream());
         }catch (IOException e){
-            System.out.println("Exception creating new Input/outpput Streams: "+ e);
+            System.out.println("Exception creating new Input/output Streams: "+ e);
         }
 
         new ListenFromSever().start();
 
         try{
-            outputStream.writeObject(userId+"");
+            outputStream.writeObject("test#"+userId);
         }catch (IOException e){
             System.out.println("Exception doing login : " + e);
             disconnect();
