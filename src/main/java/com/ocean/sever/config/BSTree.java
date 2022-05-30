@@ -27,12 +27,21 @@ public class BSTree {
         return current;
     }
 
+    public void findAll(){
+        if (root.leftChild != null) {
+            findAll();
+        }
+        System.out.println(root.userId);
+        if (root.rightChild != null) {
+            findAll();
+        }
+    }
+
     public boolean insert(Node node){
         if (root==null) {
             root = node;
             return true;
         }
-        //TODO 不允许插入重复项
 
         if (node.userId==root.userId){
             System.out.println("插入重复");
@@ -57,4 +66,5 @@ public class BSTree {
         }
         return false;
     }
+
 }

@@ -11,11 +11,11 @@ package com.ocean.sever.config;
  */
 public class Node<T> {
     public long userId;
-    public T thread;
+    public Thread thread;
     public Node leftChild;
     public Node rightChild;
 
-    public Node(long id, T thread) {
+    public Node(long id, Thread thread) {
         this.userId = id;
         this.thread = thread;
     }

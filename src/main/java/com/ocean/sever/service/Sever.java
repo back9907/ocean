@@ -54,12 +54,15 @@ public class Sever {
                 }
 
                 ClientThread t = new ClientThread(socket);
-                Node<ClientThread> clientNode= new Node<>(t.userId,t);
-                if (!tree.insert(clientNode)){
-                    LOG.warn("客户端已存在");
-                    return;
+                if (tree.find(t.userId) == null) {
+                    Node<ClientThread> clientNode= new Node<>(t.userId,t);
+                    tree.insert(clientNode);
+                    t.start();
+                } else {
+                    if (tree.find(t.userId).thread.isAlive()) {
+                        LOG.warn("存在线程正在运行");
+                    }
                 }
-                t.start();
             }
 
         } catch (IOException e) {
@@ -129,9 +132,9 @@ public class Sever {
                     System.out.println(userId + "Exception reading Stream: " + e);
                     break;
                 } catch (ClassNotFoundException e) {
+                    close();
+                    start();
                     break;
-                }catch (Exception e){
-                    System.out.println(e.getMessage());
                 }
 
             }
@@ -167,6 +170,7 @@ public class Sever {
 
             try{
                 outputStream.writeObject(msg);
+                outputStream.flush();
             }catch (IOException e){
                 System.out.println("Error sending message to " + userId);
                 System.out.println(e);
