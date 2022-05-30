@@ -82,16 +82,18 @@ public class Sever {
     private synchronized void sendMessage(String message, int destination) throws IOException {
         String time = sdf.format(new Date());
         String messageLf = time + "#" + message;
-        System.out.println(messageLf);
+
 
 
         ClientThread ct = (ClientThread) tree.find(destination).thread;
+        System.out.println(messageLf);
 
         if (!ct.writeMsg(messageLf)) {
-//            al.remove(destination);
-            System.out.println("Disconnected Client " + ct.userId + " removed from list.");
+////            al.remove(destination);
+//            System.out.println("Disconnected Client " + ct.userId + " removed from list.");
+            LOG.warn("sever收到消息但未能成功发出");
         }
-
+        LOG.info("消息已发出");
         ct.outputStream.flush();
     }
 
@@ -171,11 +173,12 @@ public class Sever {
             try{
                 outputStream.writeObject(msg);
                 outputStream.flush();
+                return true;
             }catch (IOException e){
                 System.out.println("Error sending message to " + userId);
                 System.out.println(e);
             }
-            return true;
+            return false;
         }
     }
 }
