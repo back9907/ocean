@@ -14,6 +14,9 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.Arrays;
+import java.util.concurrent.BrokenBarrierException;
+import java.util.concurrent.CyclicBarrier;
 
 /**
  * @author back
@@ -25,81 +28,88 @@ public class Client {
     MessageService messageService;
 
 
-    private ObjectInputStream inputStream;
-    private ObjectOutputStream outputStream;
-    private Socket socket;
+    private ObjectInputStream[] inputStream = new ObjectInputStream[100];
+    private ObjectOutputStream[] outputStream = new ObjectOutputStream[100];
+    private Socket[] socket = new Socket[100];
 
     private String userName;
-    private long userId;
+    private long[] userIds = new long[100];
+
 
 
     public void sendMessage(String message){
+        int sourceId = Integer.parseInt(message.split("#")[0]);
         try{
-            outputStream.writeObject(message);
+            outputStream[sourceId] .writeObject(message);
         } catch (IOException e){
             System.out.println("Exception writing to server: " + e);
         }
     }
 
-    private void disconnect() {
-        try {
-            if (inputStream != null) {
-                inputStream.close();
-            }
-        } catch (Exception e) {
-        }
-
-        try {
-            if (outputStream != null) {
-                outputStream.close();
-            }
-        } catch (Exception r) {
-        }
-
-        try {
-            if (socket != null) {
-                socket.close();
-            }
-        } catch (Exception e) {
-        }
-    }
+//    private void disconnect() {
+//        try {
+//            if (inputStream != null) {
+//                inputStream[(int)userId] .close();
+//            }
+//        } catch (Exception e) {
+//        }
+//
+//        try {
+//            if (outputStream != null) {
+//                outputStream[(int)userId] .close();
+//            }
+//        } catch (Exception r) {
+//        }
+//
+//        try {
+//            if (socket != null) {
+//                socket[(int)userId] .close();
+//            }
+//        } catch (Exception e) {
+//        }
+//    }
 
     public void startUp(long userId) {
 
-        this.userId = userId;
+        this.userIds[(int)userId] = userId;
         try{
-            socket = new Socket("localhost",4242);
+            socket[(int)userId] = new Socket("localhost",4242);
         }catch (Exception e){
             System.out.println("Error connection to server: " + e);
         }
 
-        String msg = "Connection accept " +socket.getInetAddress() + ":" + socket.getPort();
+        String msg = "Connection accept " +socket[(int)userId] .getInetAddress() + ":" + socket[(int)userId] .getPort();
         System.out.println(msg);
 
         try {
-            outputStream = new ObjectOutputStream(socket.getOutputStream());
-            inputStream = new ObjectInputStream(socket.getInputStream());
+            outputStream[(int)userId]  = new ObjectOutputStream(socket[(int)userId] .getOutputStream());
+            inputStream[(int)userId]  = new ObjectInputStream(socket[(int)userId] .getInputStream());
         }catch (IOException e){
             System.out.println("Exception creating new Input/output Streams: "+ e);
         }
 
-        new ListenFromSever().start();
+        new ListenFromSever(userId).start();
 
         try{
-            outputStream.writeObject("test#"+userId);
+            outputStream[(int)userId] .writeObject("test#"+userId);
         }catch (IOException e){
             System.out.println("Exception doing login : " + e);
-            disconnect();
+//            disconnect();
         }
     }
 
     class ListenFromSever extends Thread{
+        long userId;
 
+        public ListenFromSever(long userId){
+            this.userId=userId;
+        }
         @Override
         public void run(){
             while (true){
                 try {
-                    String msg = inputStream.readObject().toString();
+                    String msg = inputStream[(int) userId].readObject().toString();
+                    System.out.println("helloWorld");
                     String[] message = msg.split("#");
                     System.out.println(message[3]);
                     messageService.createMessage(Long.parseLong(message[1]),Long.parseLong(message[2]),message[3]);
