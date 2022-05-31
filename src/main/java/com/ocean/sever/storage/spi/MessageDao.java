@@ -9,12 +9,13 @@ package com.ocean.sever.storage.spi;
 import com.ocean.sever.entity.ChatMessage;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author back
  */
 public interface MessageDao {
     long createMessage(ChatMessage chatMessage);
-    List<ChatMessage> receiveMessage(long userId, long friendId, long lastTime);
+    Set<ChatMessage> receiveMessage(long userId, long friendId, long lastTime);
     List<ChatMessage> receiveAllFriendNewMessage(long userId, long lastTime);
 }

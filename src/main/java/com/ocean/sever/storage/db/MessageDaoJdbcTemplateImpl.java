@@ -17,7 +17,9 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import java.sql.ResultSet;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author back
@@ -50,7 +52,7 @@ public class MessageDaoJdbcTemplateImpl implements MessageDao {
     }
 
     @Override
-    public List<ChatMessage> receiveMessage(long userId, long friendId, long lastTime) {
+    public Set<ChatMessage> receiveMessage(long userId, long friendId, long lastTime) {
         String sql = "SELECT * from message_info WHERE ((receiver_id = :receiver_id AND sender_id = :sender_id) OR" +
                 " (receiver_id = :sender_id AND sender_id = :receiver_id))" +
                 " AND  UNIX_TIMESTAMP(create_time) * 1000 > :create_time;";
@@ -58,7 +60,7 @@ public class MessageDaoJdbcTemplateImpl implements MessageDao {
         mapSqlParameterSource.addValue("sender_id",friendId);
         mapSqlParameterSource.addValue("receiver_id", userId);
         mapSqlParameterSource.addValue("create_time", lastTime);
-        return namedParameterJdbcTemplate.query(sql,mapSqlParameterSource,ROWMAPPER);
+        return new HashSet<>(namedParameterJdbcTemplate.query(sql,mapSqlParameterSource,ROWMAPPER));
     }
 
     @Override

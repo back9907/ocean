@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author back
@@ -34,7 +35,7 @@ public class ChatLogicImpl implements ChatLogic {
     }
 
     @Override
-    public List<ChatMessage> receiveMessage(long userId, long friendId, long lastTime) {
+    public Set<ChatMessage> receiveMessage(long userId, long friendId, long lastTime) {
         return messageService.receiveMessage(userId, friendId, lastTime);
     }
 
