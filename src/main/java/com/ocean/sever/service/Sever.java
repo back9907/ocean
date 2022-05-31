@@ -89,8 +89,6 @@ public class Sever {
         System.out.println(messageLf);
 
         if (!ct.writeMsg(messageLf)) {
-////            al.remove(destination);
-//            System.out.println("Disconnected Client " + ct.userId + " removed from list.");
             LOG.warn("sever收到消息但未能成功发出");
         }
         LOG.info("消息已发出");
@@ -173,6 +171,7 @@ public class Sever {
 
             try{
                 outputStream.writeObject(msg);
+                LOG.info(userId+"成功发出！！！！！！！");
                 outputStream.flush();
                 return true;
             }catch (IOException e){

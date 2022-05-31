@@ -103,8 +103,6 @@ public class Client {
                     String[] message = msg.split("#");
                     System.out.println(message[3]);
                     messageService.createMessage(Long.parseLong(message[1]),Long.parseLong(message[2]),message[3]);
-
-
                 }catch (IOException e){
                     System.out.println("Sever has close the connection: " + e);
                     break;
